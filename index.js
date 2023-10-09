@@ -1,3 +1,6 @@
+import platform from "./img/house_platform-rem-cut.png";
+console.log(platform);
+
 const canvas = document.querySelector("canvas");
 
 const c = canvas.getContext("2d");
@@ -109,6 +112,10 @@ function animate() {
       player.velocity.y = 0;
     }
   });
+
+  if (scrollOffset > 2000) {
+    console.log("You Win");
+  }
 }
 
 animate();
