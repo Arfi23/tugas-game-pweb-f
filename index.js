@@ -1,6 +1,3 @@
-import platform from "./img/house_platform-rem-cut.png";
-console.log(platform);
-
 const canvas = document.querySelector("canvas");
 
 const c = canvas.getContext("2d");
@@ -10,6 +7,9 @@ canvas.width = innerWidth;
 canvas.height = innerHeight;
 
 const gravity = 0.2;
+const playerImage = new Image();
+playerImage.src = "./img/ninja_run 2.png";
+
 class Player {
   constructor() {
     this.position = {
@@ -21,13 +21,26 @@ class Player {
       y: 0,
     };
 
-    this.width = 30;
-    this.height = 30;
+    this.flipX = false;
+    this.width = 100;
+    this.height = 100;
   }
 
   draw() {
-    c.fillStyle = "teal";
-    c.fillRect(this.position.x, this.position.y, this.width, this.height);
+    // c.fillStyle = "teal";
+    // c.fillRect(this.position.x, this.position.y, this.width, this.height);
+    c.save();
+    // c.drawImage(playerImage, this.position.x, this.position.y, this.width, this.height);
+    if (this.flipX) {
+      // Flip gambar secara horizontal
+      c.scale(-1, 1);
+      // Geser gambar agar tetap terlihat dengan benar
+      c.drawImage(playerImage, -this.position.x - this.width, this.position.y, this.width, this.height);
+    } else {
+      // Gambar gambar tanpa flipping
+      c.drawImage(playerImage, this.position.x, this.position.y, this.width, this.height);
+    }
+    c.restore();
   }
 
   update() {
@@ -59,7 +72,7 @@ class Platform {
 
 const player = new Player();
 
-const platforms = [new Platform({ x: 200, y: 100 }), new Platform({ x: 500, y: 200 })];
+const platforms = [new Platform({ x: 200, y: 500 }), new Platform({ x: 500, y: 400 }), new Platform({ x: 600, y: 200 }), new Platform({ x: 800, y: 600 })];
 
 const keys = {
   right: {
@@ -83,8 +96,10 @@ function animate() {
 
   if (keys.right.pressed && player.position.x < 400) {
     player.velocity.x = 5;
+    player.flipX = true;
   } else if (keys.left.pressed && player.position.x > 100) {
     player.velocity.x = -5;
+    player.flipX = false;
   } else {
     player.velocity.x = 0;
     // screen scrolling
@@ -140,6 +155,7 @@ addEventListener("keydown", ({ keyCode }) => {
     case 87:
       console.log("up");
       player.velocity.y -= 10;
+      playerImage.src = "./img/ninja_jump 3.png";
       break;
 
     default:
@@ -167,6 +183,7 @@ addEventListener("keyup", ({ keyCode }) => {
     case 87:
       console.log("up");
       player.velocity.y += 1;
+      playerImage.src = "./img/ninja_fall 1.png";
       break;
 
     default:
