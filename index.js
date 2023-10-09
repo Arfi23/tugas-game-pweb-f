@@ -9,6 +9,8 @@ canvas.height = innerHeight;
 const gravity = 0.2;
 const playerImage = new Image();
 playerImage.src = "./img/ninja_run 2.png";
+const pformImage = new Image();
+pformImage.src = "./img/house_pl 2.png";
 
 class Player {
   constructor() {
@@ -55,24 +57,28 @@ class Player {
 }
 
 class Platform {
-  constructor({ x, y }) {
+  constructor({ x, y, image }) {
     this.position = {
       x,
       y,
     };
-    this.width = 200;
-    this.height = 20;
+    this.width = 300;
+    this.height = 190;
+    // this.width = image.width;
+    // this.height = image.height;
+    this.image = image;
   }
 
   draw() {
-    c.fillStyle = "blue";
-    c.fillRect(this.position.x, this.position.y, this.width, this.height);
+    // c.fillStyle = "blue";
+    // c.fillRect(this.position.x, this.position.y, this.width, this.height);
+    c.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
   }
 }
 
 const player = new Player();
 
-const platforms = [new Platform({ x: 200, y: 500 }), new Platform({ x: 500, y: 400 }), new Platform({ x: 600, y: 200 }), new Platform({ x: 800, y: 600 })];
+const platforms = [new Platform({ x: 200, y: 500, image: pformImage }), new Platform({ x: 300, y: 500, image: pformImage }), new Platform({ x: 500, y: 500, image: pformImage }), new Platform({ x: 700, y: 500, image: pformImage })];
 
 const keys = {
   right: {
@@ -89,10 +95,11 @@ function animate() {
   requestAnimationFrame(animate);
   // console.log('go')
   c.clearRect(0, 0, canvas.width, canvas.height);
-  player.update();
+
   platforms.forEach((platform) => {
     platform.draw();
   });
+  player.update();
 
   if (keys.right.pressed && player.position.x < 400) {
     player.velocity.x = 5;
